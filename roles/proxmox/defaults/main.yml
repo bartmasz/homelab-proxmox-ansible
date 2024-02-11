@@ -24,3 +24,4 @@ proxmox_packages:
   - stress
   - stress-ng
   - zsh
+proxmox_ssh_port: 22
