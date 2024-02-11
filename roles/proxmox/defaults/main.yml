@@ -1,0 +1,26 @@
+proxmox_packages:
+  - atop
+  - cifs-utils
+  - cpufrequtils
+  - git
+  - glances
+  - hdparm
+  - htop
+  - iftop
+  - iotop
+  - linux-cpupower
+  - lm-sensors
+  - neofetch
+  - nfs-kernel-server
+  - nvtop
+  - powertop
+  - python3-proxmoxer
+  - radeontop
+  - s-tui
+  - samba
+  - smartmontools
+  - smbclient
+  - speedtest-cli
+  - stress
+  - stress-ng
+  - zsh

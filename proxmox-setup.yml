@@ -1,4 +1,0 @@
----
-- name: Setup Proxmox host
-  hosts: proxmox
-  gather_facts: true

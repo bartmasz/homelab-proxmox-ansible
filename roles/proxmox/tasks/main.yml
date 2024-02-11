@@ -1,0 +1,3 @@
+- name: Include tasks from pve_packages.yml
+  ansible.builtin.import_tasks: pve_packages.yml
+  tags: pve
