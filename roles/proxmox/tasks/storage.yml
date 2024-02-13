@@ -1,0 +1,8 @@
+- name: Update local storage scope
+  ansible.builtin.command:
+    cmd: pvesm set {{ proxmox_local_storage_name }} --content backup,snippets,iso,vztmpl
+  changed_when: true
+
+- name: Update lxc templates # noqa: no-changed-when
+  ansible.builtin.command:
+    cmd: pveam update

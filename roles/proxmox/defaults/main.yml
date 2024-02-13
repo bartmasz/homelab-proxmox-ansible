@@ -27,3 +27,4 @@ proxmox_packages:
 proxmox_ssh_port: 22
 proxmox_hdds: []
 proxmox_hdparm_sleep: 0
+proxmox_local_storage_name: local
