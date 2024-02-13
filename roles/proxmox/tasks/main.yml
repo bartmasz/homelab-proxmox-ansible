@@ -5,3 +5,7 @@
 - name: Import tasks from ssh.yml
   ansible.builtin.import_tasks: ssh.yml
   tags: ssh
+
+- name: Import tasks from energy.yml
+  ansible.builtin.import_tasks: energy.yml
+  tags: energy

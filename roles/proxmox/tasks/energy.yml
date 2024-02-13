@@ -1,0 +1,24 @@
+---
+- name: Create rc.local file
+  ansible.builtin.copy:
+    content: |
+      #!/bin/sh -e
+      exit 0
+    dest: /etc/rc.local
+    mode: "0755"
+  notify: Execute rc.local
+
+- name: Add powertop auto-tune to rc.local file
+  ansible.builtin.lineinfile:
+    path: /etc/rc.local
+    line: powertop --auto-tune
+    insertbefore: exit 0
+  notify: Execute rc.local
+
+- name: Add hdparm hdd sleep settings to rc.local file
+  ansible.builtin.lineinfile:
+    path: /etc/rc.local
+    line: hdparm -S {{ proxmox_hdparm_sleep }} {{ item }}
+    insertbefore: exit 0
+  loop: "{{ proxmox_hdds }}"
+  notify: Execute rc.local

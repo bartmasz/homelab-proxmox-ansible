@@ -25,3 +25,5 @@ proxmox_packages:
   - stress-ng
   - zsh
 proxmox_ssh_port: 22
+proxmox_hdds: []
+proxmox_hdparm_sleep: 0

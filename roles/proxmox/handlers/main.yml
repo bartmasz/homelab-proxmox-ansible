@@ -2,3 +2,9 @@
   ansible.builtin.service:
     name: sshd
     state: restarted
+
+- name: Execute rc.local
+  ansible.builtin.command: /etc/rc.local
+  changed_when: true
+  register: rc_local
+  failed_when: rc_local.rc != 0
