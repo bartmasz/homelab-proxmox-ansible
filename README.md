@@ -30,7 +30,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub root@10.0.0.2
 
 ### Reviewing Ansible settings
 
-Review `hosts` file. Ensure that proxmox host IP is correct and alias matches the one used in the playbook.
+Review `hosts.ini` file. Ensure that proxmox host IP is correct and alias matches the one used in the playbook.
 
 `ansible-lint` lints Ansible yaml files in the project.
 
