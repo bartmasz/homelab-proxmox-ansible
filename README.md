@@ -38,5 +38,5 @@ Review `hosts.ini` file. Ensure that proxmox host IP is correct and alias matche
 
 ```bash
 # -v provides verbose output
-ansible-playbook proxmox-setup.yml
+ansible-playbook playbooks/proxmox-setup.yml
 ```
