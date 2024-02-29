@@ -40,3 +40,20 @@ Review `hosts.ini` file. Ensure that proxmox host IP is correct and alias matche
 # -v provides verbose output
 ansible-playbook playbooks/proxmox-setup.yml
 ```
+
+## Virtualization
+
+```bash
+# Verify IOMMU is enabled
+dmesg | grep  -i -e DMAR -e IOMMU
+
+# Verify IOMMU interrupt remapping is enabled
+dmesg | grep 'remapping'
+
+# Verify IOMMU isolation
+pvesh get /nodes/silverstone/hardware/pci --pci-class-blacklist ""
+iommu_check.sh
+
+# Check CPU frequency manager and governor
+cpupower frequency-info
+```

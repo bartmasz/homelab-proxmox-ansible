@@ -28,3 +28,22 @@
   notify:
     - Update initramfs
     - Reboot host and wait for it to restart
+
+- name: Copy iommu check script
+  ansible.builtin.copy:
+    src: iommu_check.sh
+    dest: /usr/local/bin/iommu_check.sh
+    mode: "0755"
+  when: proxmox_iommu_enabled is true
+
+- name: Run iommu check script
+  ansible.builtin.command: /usr/local/bin/iommu_check.sh
+  when: proxmox_iommu_enabled is true
+  register: iommu_check
+  changed_when: false
+
+- name: Print IOMMU check results
+  ansible.builtin.debug:
+    msg: "{{ iommu_check.stdout_lines }}"
+  when: proxmox_iommu_enabled is true
+  changed_when: false
