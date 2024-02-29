@@ -65,9 +65,3 @@
     path: ~/.zshrc
     regex: "^ZSH_THEME="
     line: ZSH_THEME="powerlevel10k/powerlevel10k"
-
-- name: Add neofetch to .zshrc
-  ansible.builtin.lineinfile:
-    path: ~/.zshrc
-    line: neofetch
-    insertbefore: BOF
