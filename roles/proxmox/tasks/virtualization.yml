@@ -1,0 +1,30 @@
+- name: Disable IOMMU in Grub
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: GRUB_CMDLINE_LINUX_DEFAULT="{{ proxmox_grub_cmdline_iommu_off }}"
+  when: proxmox_iommu_enabled is false
+  notify:
+    - Update Grub configuration
+    - Reboot host and wait for it to restart
+
+- name: Enable IOMMU in Grub
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: GRUB_CMDLINE_LINUX_DEFAULT="{{ proxmox_grub_cmdline_iommu_on }}"
+  when: proxmox_iommu_enabled is true
+  notify:
+    - Update Grub configuration
+    - Reboot host and wait for it to restart
+
+- name: Add kernel modules
+  ansible.builtin.lineinfile:
+    path: /etc/modules
+    line: "{{ item }}"
+    state: present
+  loop: "{{ proxmox_kernel_modules }}"
+  when: proxmox_iommu_enabled is true
+  notify:
+    - Update initramfs
+    - Reboot host and wait for it to restart

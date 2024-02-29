@@ -17,3 +17,7 @@
 - name: Import tasks from shell.yml
   ansible.builtin.import_tasks: shell.yml
   tags: shell
+
+- name: Import tasks from virtualization.yml
+  ansible.builtin.import_tasks: virtualization.yml
+  tags: virtualization
