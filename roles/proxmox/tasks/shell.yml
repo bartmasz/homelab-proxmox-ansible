@@ -1,0 +1,73 @@
+- name: Install zsh
+  ansible.builtin.package:
+    name: zsh
+    state: present
+
+- name: Set zsh as root default shell
+  ansible.builtin.user:
+    user: root
+    shell: /usr/bin/zsh
+
+- name: Check if .oh-my-zsh folder exists
+  ansible.builtin.stat:
+    path: ~/.oh-my-zsh
+  register: oh_my_zsh_exists
+
+- name: Download Oh My Zsh install script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /root/install_ohmyzsh.sh
+    mode: "0755"
+  when: not oh_my_zsh_exists.stat.exists
+
+- name: Install Oh My Zsh # noqa: no-changed-when
+  ansible.builtin.command: sh /root/install_ohmyzsh.sh --unattended
+  when: not oh_my_zsh_exists.stat.exists
+
+- name: Delete install_ohmyzsh.sh script
+  ansible.builtin.file:
+    path: /root/install_ohmyzsh.sh
+    state: absent
+
+- name: Install zsh-users plugins # noqa: latest
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "~/.oh-my-zsh/custom/plugins/{{ item.dest }}"
+    depth: 1
+  with_items:
+    - repo: https://github.com/zsh-users/zsh-autosuggestions
+      dest: zsh-autosuggestions
+    - repo: https://github.com/zsh-users/zsh-completions
+      dest: zsh-completions
+    - repo: https://github.com/zsh-users/zsh-syntax-highlighting
+      dest: zsh-syntax-highlighting
+
+- name: Add plugins to .zshrc
+  ansible.builtin.lineinfile:
+    path: ~/.zshrc
+    regex: "^plugins="
+    line: plugins=(colorize colored-man-pages zsh-autosuggestions zsh-syntax-highlighting)
+
+- name: Add zsh-completions to .zshrc
+  ansible.builtin.lineinfile:
+    path: ~/.zshrc
+    line: fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+    insertbefore: "^source "
+
+- name: Install pokwerlevel10k # noqa: latest
+  ansible.builtin.git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: ~/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+
+- name: Set pokwerlevel10k as zsh theme
+  ansible.builtin.lineinfile:
+    path: ~/.zshrc
+    regex: "^ZSH_THEME="
+    line: ZSH_THEME="powerlevel10k/powerlevel10k"
+
+- name: Add neofetch to .zshrc
+  ansible.builtin.lineinfile:
+    path: ~/.zshrc
+    line: neofetch
+    insertbefore: BOF
