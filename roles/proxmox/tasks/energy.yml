@@ -1,4 +1,9 @@
 ---
+- name: Check if rc.local exits
+  ansible.builtin.stat:
+    path: /etc/rc.local
+  register: rc_local
+
 - name: Create rc.local file
   ansible.builtin.copy:
     content: |
@@ -6,13 +11,7 @@
       exit 0
     dest: /etc/rc.local
     mode: "0755"
-  notify: Execute rc.local
-
-- name: Add powertop auto-tune to rc.local file
-  ansible.builtin.lineinfile:
-    path: /etc/rc.local
-    line: powertop --auto-tune
-    insertbefore: exit 0
+  when: not rc_local.stat.exists
   notify: Execute rc.local
 
 - name: Add hdparm hdd sleep settings to rc.local file
@@ -22,3 +21,29 @@
     insertbefore: exit 0
   loop: "{{ proxmox_hdds }}"
   notify: Execute rc.local
+
+- name: Copy powertop-override script
+  ansible.builtin.copy:
+    src: powertop-override.sh
+    dest: /usr/local/sbin/powertop-override.sh
+    mode: "0755"
+
+- name: Copy powertop-override service
+  ansible.builtin.copy:
+    src: powertop-override.service
+    dest: /lib/systemd/system/powertop-override.service
+    mode: "0644"
+
+- name: Enable and start powertop service
+  ansible.builtin.systemd:
+    name: powertop
+    state: started
+    enabled: true
+    daemon_reload: true
+
+- name: Enable and start powertop-override service
+  ansible.builtin.systemd:
+    name: powertop-override
+    state: started
+    enabled: true
+    daemon_reload: true

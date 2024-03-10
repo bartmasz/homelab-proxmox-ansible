@@ -1,0 +1,11 @@
+[Unit]
+Description=PowerTOP overrides
+Requires=powertop.service
+After=powertop.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/powertop-override.sh
+
+[Install]
+WantedBy=multi-user.target
