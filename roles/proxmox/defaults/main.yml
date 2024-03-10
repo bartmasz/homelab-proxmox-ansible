@@ -30,3 +30,4 @@ proxmox_kernel_modules:
   - vfio
   - vfio_pci
   - vfio_iommu_type1
+proxmox_nvidia_driver_version: "550.54.14"

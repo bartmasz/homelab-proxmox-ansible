@@ -21,3 +21,7 @@
 - name: Import tasks from virtualization.yml
   ansible.builtin.import_tasks: virtualization.yml
   tags: virtualization
+
+- name: Import tasks from nvidia-driver.yml
+  ansible.builtin.import_tasks: nvidia-driver.yml
+  tags: nvidia-driver
