@@ -17,7 +17,6 @@ proxmox_packages:
   - samba
   - smartmontools
   - smbclient
-  - speedtest-cli
   - stress
   - stress-ng
 proxmox_ssh_port: 22
