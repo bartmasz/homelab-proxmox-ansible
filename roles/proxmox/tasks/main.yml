@@ -29,3 +29,7 @@
 - name: Import tasks from speedtest.yml
   ansible.builtin.import_tasks: speedtest.yml
   tags: speedtest
+
+- name: Import tasks from zfs.yml
+  ansible.builtin.import_tasks: zfs.yml
+  tags: zfs

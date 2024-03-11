@@ -1,0 +1,21 @@
+- name: ZFS dataset details
+  ansible.builtin.debug:
+    var: dataset
+
+- name: Check if ZFS dataset exists
+  ansible.builtin.command: zfs list {{ dataset.dataset_name }}
+  register: dataset_status
+  failed_when: dataset_status.rc != 0 and 'dataset does not exist' not in dataset_status.stderr
+  changed_when: false
+
+- name: Create ZFS dataset
+  ansible.builtin.command: zfs create {{ dataset.dataset_name }}
+  register: zfs_create
+  when: "'dataset does not exist' in dataset_status.stderr"
+  changed_when: zfs_create.rc == 0
+
+- name: Add ZFS dataset properties
+  ansible.builtin.command: zfs set {{ item.option_name }}='{{ item.option_value }}' {{ dataset.dataset_name }}
+  loop: "{{ dataset.dataset_options }}"
+  when: dataset_status.rc == 0 and dataset.dataset_options is defined
+  changed_when: true

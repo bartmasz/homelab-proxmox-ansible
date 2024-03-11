@@ -1,0 +1,11 @@
+- name: Check and create ZFS pools
+  ansible.builtin.include_tasks: zfs-pool.yml
+  loop: "{{ zfs_pools }}"
+  loop_control:
+    loop_var: zpool
+
+- name: Check and create ZFS datasets
+  ansible.builtin.include_tasks: zfs-dataset.yml
+  loop: "{{ zfs_datasets }}"
+  loop_control:
+    loop_var: dataset
