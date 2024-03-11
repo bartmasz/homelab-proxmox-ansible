@@ -1,36 +1,46 @@
-- name: Install dependencies
-  ansible.builtin.apt:
-    name:
-      - build-essential
-      - pve-headers-{{ ansible_kernel }}
-      - libgl1-mesa-glx
-      - pkg-config
-      - libglvnd-dev
-    state: present
-    update_cache: true
-
-- name: Disable Nouveau Driver
-  ansible.builtin.blockinfile:
-    path: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-    block: |
-      blacklist nouveau
-      options nouveau modeset=0
-    create: true
-    mode: "0644"
-  notify:
-    - Update initramfs
-    - Reboot host and wait for it to restart
-
-- name: Flush Handlers
-  ansible.builtin.meta: flush_handlers
-
-- name: Download NVIDIA Driver
-  ansible.builtin.get_url:
-    url: "http://us.download.nvidia.com/XFree86/Linux-x86_64/{{ proxmox_nvidia_driver_version }}/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run"
-    dest: "/tmp/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run"
-    mode: "0775"
-
-- name: Execute NVIDIA Driver Installer # noqa: ignore-errors
-  ansible.builtin.command: "/tmp/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run --dkms --no-x-check --no-nouveau-check --silent"
+- name: Check NVIDIA driver
+  ansible.builtin.command:
+    cmd: nvidia-smi
+  register: nvidia_smi_output
   ignore_errors: true
-  changed_when: true
+  changed_when: false
+
+- name: Install NVIDIA drivers
+  when: nvidia_smi_output.rc != 0
+  block:
+    - name: Install dependencies
+      ansible.builtin.apt:
+        name:
+          - build-essential
+          - pve-headers-{{ ansible_kernel }}
+          - libgl1-mesa-glx
+          - pkg-config
+          - libglvnd-dev
+        state: present
+        update_cache: true
+
+    - name: Disable Nouveau Driver
+      ansible.builtin.blockinfile:
+        path: /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+        block: |
+          blacklist nouveau
+          options nouveau modeset=0
+        create: true
+        mode: "0644"
+      notify:
+        - Update initramfs
+        - Reboot host and wait for it to restart
+
+    - name: Flush Handlers
+      ansible.builtin.meta: flush_handlers
+
+    - name: Download NVIDIA Driver
+      ansible.builtin.get_url:
+        url: "http://us.download.nvidia.com/XFree86/Linux-x86_64/{{ proxmox_nvidia_driver_version }}/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run" # yamllint disable-line rule:line-length
+        dest: "/tmp/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run"
+        mode: "0775"
+
+    - name: Execute NVIDIA Driver Installer # noqa: ignore-errors
+      ansible.builtin.command: "/tmp/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run --dkms --no-x-check --no-nouveau-check --silent"
+      ignore_errors: true
+      changed_when: true

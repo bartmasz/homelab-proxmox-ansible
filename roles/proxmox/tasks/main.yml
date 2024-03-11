@@ -1,5 +1,5 @@
-- name: Import tasks from pve_packages.yml
-  ansible.builtin.import_tasks: pve_packages.yml
+- name: Import tasks from pve-packages.yml
+  ansible.builtin.import_tasks: pve-packages.yml
   tags: pve
 
 - name: Import tasks from ssh.yml

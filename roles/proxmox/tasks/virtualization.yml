@@ -31,13 +31,13 @@
 
 - name: Copy iommu check script
   ansible.builtin.copy:
-    src: iommu_check.sh
-    dest: /usr/local/bin/iommu_check.sh
+    src: iommu-check.sh
+    dest: /usr/local/bin/iommu-check.sh
     mode: "0755"
   when: proxmox_iommu_enabled is true
 
 - name: Run iommu check script
-  ansible.builtin.command: /usr/local/bin/iommu_check.sh
+  ansible.builtin.command: /usr/local/bin/iommu-check.sh
   when: proxmox_iommu_enabled is true
   register: iommu_check
   changed_when: false
