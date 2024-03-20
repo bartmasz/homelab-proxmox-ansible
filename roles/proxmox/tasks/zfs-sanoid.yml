@@ -1,0 +1,62 @@
+- name: Ensure Sanoid dependencies are installed
+  ansible.builtin.apt:
+    name:
+      - debhelper
+      - libcapture-tiny-perl
+      - libconfig-inifiles-perl
+      - pv
+      - lzop
+      - mbuffer
+      - build-essential
+      - git
+    state: present
+
+- name: Clone Sanoid repository
+  ansible.builtin.git:
+    repo: "https://github.com/jimsalterjrs/sanoid.git"
+    dest: "/opt/sanoid"
+    version: "{{ proxmox_sanoid_version }}"
+
+- name: Create symlink for debian package in /opt/sanoid
+  ansible.builtin.file:
+    src: /opt/sanoid/packages/debian
+    dest: /opt/sanoid/debian
+    state: link
+    force: true
+
+- name: Build Sanoid deb package
+  ansible.builtin.command:
+    cmd: dpkg-buildpackage -uc -us
+    chdir: /opt/sanoid
+    creates: /opt/sanoid_{{ proxmox_sanoid_version | regex_replace('^v', '') }}_all.deb
+
+- name: Ensure Sanoid config directory exists
+  ansible.builtin.file:
+    path: "/etc/sanoid"
+    state: directory
+    mode: "0755"
+
+- name: Install Sanoid DEB package
+  ansible.builtin.apt:
+    deb: "/opt/sanoid_{{ proxmox_sanoid_version | regex_replace('^v', '') }}_all.deb"
+
+- name: Deploy Sanoid configuration files
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - { src: "sanoid.conf", dest: "/etc/sanoid/sanoid.conf" }
+
+- name: Enable sanoid-prune.service
+  ansible.builtin.systemd:
+    name: sanoid-prune.service
+    enabled: true
+
+- name: Enable and start the Sanoid timer
+  ansible.builtin.systemd:
+    name: sanoid.timer
+    enabled: true
+    state: started

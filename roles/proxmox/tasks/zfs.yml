@@ -9,3 +9,6 @@
   loop: "{{ zfs_datasets }}"
   loop_control:
     loop_var: dataset
+
+- name: Import ZFS Sanoid tasks
+  ansible.builtin.import_tasks: zfs-sanoid.yml

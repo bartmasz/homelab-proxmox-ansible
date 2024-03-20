@@ -17,5 +17,5 @@
 - name: Add ZFS dataset properties
   ansible.builtin.command: zfs set {{ item.option_name }}='{{ item.option_value }}' {{ dataset.dataset_name }}
   loop: "{{ dataset.dataset_options }}"
-  when: dataset_status.rc == 0 and dataset.dataset_options is defined
+  when: (dataset_status.rc == 0 or zfs_create.rc == 0) and dataset.dataset_options is defined
   changed_when: true
