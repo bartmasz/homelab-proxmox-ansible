@@ -44,3 +44,10 @@
       ansible.builtin.command: "/tmp/NVIDIA-Linux-x86_64-{{ proxmox_nvidia_driver_version }}.run --dkms --no-x-check --no-nouveau-check --silent"
       ignore_errors: true
       changed_when: true
+
+- name: Enable nvidia-persistenced
+  ansible.builtin.lineinfile:
+    path: /etc/rc.local
+    line: nvidia-persistenced
+    insertbefore: exit 0
+  notify: Execute rc.local
