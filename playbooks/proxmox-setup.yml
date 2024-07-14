@@ -6,3 +6,5 @@
   roles:
     - role: proxmox
       when: ansible_facts['os_family'] == "Debian"
+      vars:
+        proxmox_is_silverstone: "{{ inventory_hostname == 'silverstone' }}"

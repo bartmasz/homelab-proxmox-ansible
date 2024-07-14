@@ -9,6 +9,7 @@
 - name: Import tasks from energy.yml
   ansible.builtin.import_tasks: energy.yml
   tags: energy
+  when: proxmox_is_silverstone
 
 - name: Import tasks from storage.yml
   ansible.builtin.import_tasks: storage.yml
@@ -25,6 +26,7 @@
 - name: Import tasks from nvidia-driver.yml
   ansible.builtin.import_tasks: nvidia-driver.yml
   tags: nvidia-driver
+  when: proxmox_is_silverstone
 
 - name: Import tasks from speedtest.yml
   ansible.builtin.import_tasks: speedtest.yml
@@ -33,3 +35,4 @@
 - name: Import tasks from zfs.yml
   ansible.builtin.import_tasks: zfs.yml
   tags: zfs
+  when: proxmox_is_silverstone
