@@ -1,0 +1,38 @@
+- name: Import tasks from pve-packages.yml
+  ansible.builtin.import_tasks: pve-packages.yml
+  tags: pve
+
+- name: Import tasks from ssh.yml
+  ansible.builtin.import_tasks: ssh.yml
+  tags: ssh
+
+- name: Import tasks from energy.yml
+  ansible.builtin.import_tasks: energy.yml
+  tags: energy
+  when: proxmox_is_silverstone
+
+- name: Import tasks from storage.yml
+  ansible.builtin.import_tasks: storage.yml
+  tags: storage
+
+- name: Import tasks from shell.yml
+  ansible.builtin.import_tasks: shell.yml
+  tags: shell
+
+- name: Import tasks from virtualization.yml
+  ansible.builtin.import_tasks: virtualization.yml
+  tags: virtualization
+
+- name: Import tasks from nvidia-driver.yml
+  ansible.builtin.import_tasks: nvidia-driver.yml
+  tags: nvidia-driver
+  when: proxmox_is_silverstone
+
+- name: Import tasks from speedtest.yml
+  ansible.builtin.import_tasks: speedtest.yml
+  tags: speedtest
+
+- name: Import tasks from zfs.yml
+  ansible.builtin.import_tasks: zfs.yml
+  tags: zfs
+  when: proxmox_is_silverstone

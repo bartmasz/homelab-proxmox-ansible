@@ -1,0 +1,15 @@
+- name: ZFS pool details
+  ansible.builtin.debug:
+    var: zpool
+
+- name: Check if ZFS pool exists
+  ansible.builtin.command: zpool status {{ zpool.zpool_name }}
+  register: zpool_status
+  failed_when: zpool_status.rc != 0 and 'no such pool' not in zpool_status.stderr
+  changed_when: false
+
+- name: Create ZFS pool
+  ansible.builtin.command: zpool create {{ zpool.zpool_name }} {{ zpool.zpool_options }}
+  register: zpool_create
+  when: "'no such pool' in zpool_status.stderr"
+  changed_when: zpool_create.rc == 0

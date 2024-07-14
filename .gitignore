@@ -1,0 +1,4 @@
+.venv/
+.fact_cache/
+.vscode/
+.DS_Store

@@ -1,0 +1,2 @@
+zfs_pools: "{{ vault_zfs_pools }}"
+zfs_datasets: "{{ vault_zfs_datasets }}"

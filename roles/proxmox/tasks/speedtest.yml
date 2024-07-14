@@ -1,0 +1,23 @@
+- name: Check speedtest
+  ansible.builtin.stat:
+    path: /usr/bin/speedtest
+  register: speedtest_output
+
+- name: Install speedtest
+  when: not speedtest_output.stat.exists
+  block:
+    - name: Get speedtest install script
+      ansible.builtin.get_url:
+        url: https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh
+        dest: /tmp/speedtest-install.sh
+        mode: "0755"
+
+    - name: Execute speedtest install script # noqa: command-instead-of-shell
+      ansible.builtin.shell:
+        cmd: os={{ ansible_distribution }} dist={{ ansible_distribution_release }} /tmp/speedtest-install.sh
+        creates: /usr/bin/speedtest
+
+    - name: Install speedtest
+      ansible.builtin.apt:
+        name: speedtest
+        state: present

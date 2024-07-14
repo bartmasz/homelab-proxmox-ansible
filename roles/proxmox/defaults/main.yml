@@ -1,0 +1,34 @@
+proxmox_packages:
+  - atop
+  - cifs-utils
+  - cpufrequtils
+  - git
+  - glances
+  - hdparm
+  - htop
+  - iftop
+  - iotop
+  - linux-cpupower
+  - lm-sensors
+  - nfs-kernel-server
+  - powertop
+  - python3-proxmoxer
+  - s-tui
+  - samba
+  - smartmontools
+  - smbclient
+  - stress
+  - stress-ng
+proxmox_ssh_port: 22
+proxmox_hdds: []
+proxmox_hdparm_sleep: 0
+proxmox_local_storage_name: local
+proxmox_iommu_enabled: true
+proxmox_grub_cmdline_iommu_off: quiet
+proxmox_grub_cmdline_iommu_on: quiet amd_iommu=on iommu=pt pcie_acs_override=downstream,multifunction
+proxmox_kernel_modules:
+  - vfio
+  - vfio_pci
+  - vfio_iommu_type1
+proxmox_nvidia_driver_version: "550.54.14"
+proxmox_sanoid_version: v2.2.0
