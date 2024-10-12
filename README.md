@@ -52,7 +52,7 @@ dmesg | grep 'remapping'
 
 # Verify IOMMU isolation
 pvesh get /nodes/silverstone/hardware/pci --pci-class-blacklist ""
-iommu_check.sh
+iommu-check.sh
 
 # Check CPU frequency manager and governor
 cpupower frequency-info
