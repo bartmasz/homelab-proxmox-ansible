@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: v5.0.0
     hooks:
       - id: check-yaml
       - id: detect-private-key
@@ -9,6 +9,6 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/ansible/ansible-lint
-    rev: v24.2.0
+    rev: v24.10.0
     hooks:
       - id: ansible-lint
