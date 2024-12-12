@@ -16,4 +16,4 @@ jobs:
         run: mkdir ~/.ansible && echo "${{ secrets.VAULT_PASSWORD }}" > ~/.ansible/vault_password_file
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v24.10.0
+        uses: ansible/ansible-lint@v24.12.2
